@@ -1,0 +1,12 @@
+						other side 	learing,etc
+uid(int) 	word(char*) 	face(0,1)	mate(uid)	status(char*)
+1		mot		0		2		0
+2		word		1		1		0
+
+absolute time in minutes	
+before next revision		#of times	#of times
+revisionTime(minutes int)	shown(int)	failed(int)
+0				0		0
+0				0		0
+
+isInSearchTree(bool)
