@@ -1,13 +1,23 @@
 SRC_DIR += ./ \
-./lib/
+./lib/ \
+./lib/sqlite3/ 
 TARGET = sanqy
 
 SRCS = $(wildcard $(addsuffix src/*.cpp,$(SRC_DIR)))
+SRCS_C = $(wildcard $(addsuffix src/*.c,$(SRC_DIR)))
+SRCS +=$(wildcard $(addsuffix *.cpp,$(SRC_DIR)))
+SRCS_C +=$(wildcard $(addsuffix *.c,$(SRC_DIR)))
 SRCS += $(wildcard $(addsuffix src/*.s,$(SRC_DIR)))
-OBJS = $(join $(patsubst %src/, build/obj/%,$(dir $(SRCS))),$(patsubst %, %.o, $(notdir $(SRCS))) )
+
+OBJS = $(join $(patsubst %, build/obj/%,$(dir $(SRCS))),$(patsubst %, %.o, $(notdir $(SRCS))) )
+OBJS_C = $(join $(patsubst %, build/obj/%,$(dir $(SRCS_C))),$(patsubst %, %.o, $(notdir $(SRCS_C))) )
+
 DEPS = $(patsubst %, build/dep/%.d,$(notdir $(SRCS)))
+DEPS += $(patsubst %, build/dep/%.d,$(notdir $(SRCS_C)))
+
 HEADER_DIR = $(addsuffix header/,$(SRC_DIR) ) 
 HEADER_DIR += $(addsuffix include/,$(SRC_DIR) ) 
+HEADER_DIR += $(SRC_DIR)
 HEADER_DIR += usr/include/
 HEADER_DIR += ./lib/include/SQLiteCpp
 
@@ -22,21 +32,30 @@ cclsClean :
 	rm -r ./.ccls-cache/
 
 all: build/$(TARGET) .ccls
+dyn: build/lib$(TARGET).so .ccls
 
-$(addprefix build/obj/,$(SRC_DIR)) : 
+build/dep \
+$(addprefix build/obj/,$(SRC_DIR)) \
+$(addprefix build/obj/,$(addsuffix src/, $(SRC_DIR))) : 
 	mkdir -p $@
 
-build/dep:
-	mkdir -p $@
+build/lib$(TARGET).so : $(OBJS_C) $(OBJS) | build/object.list
+	@echo "building lib$(TARGET).so"
+	g++ -o "build/lib$(TARGET).so" @"build/object.list" -fPIC -shared -Wall -Wextra -Werror -L/usr/lib -lcurses -lc -lm -lstdc++
+	objdump -h -S build/lib$(TARGET).so > "build/$(TARGET).list"
 
-build/$(TARGET) : $(OBJS) | build/object.list
+build/$(TARGET) :$(OBJS_C) $(OBJS) | build/object.list
 	@echo "building $(TARGET)"
-	g++ -o "build/$(TARGET)" @"build/object.list"  -Wall -Wextra -Werror -L/usr/lib -lsqlite3 -lc -lm -lstdc++
+	g++ -o "build/$(TARGET)" @"build/object.list"  -Wall -Wextra -Werror -L/usr/lib -lcurses -lc -lm -lstdc++
 	objdump -h -S build/$(TARGET) > "build/$(TARGET).list"
+
+src.list : Makefile
+	echo -e '\
+	$(addprefix \n"./,$(addsuffix ", $(SRCS) $(SRCS_C)))' > src.list
 
 build/object.list : Makefile
 	echo -e '\
-	$(addprefix \n"./,$(addsuffix ", $(OBJS)))' > build/object.list
+	$(addprefix \n"./,$(addsuffix ", $(OBJS) $(OBJS_C)))' > build/object.list
 	mv build/object.list build/.tmp
 	tail -n +3 build/.tmp > build/object.list
 	rm build/.tmp
@@ -65,9 +84,15 @@ $(subst ${ },\n,$(strip $(CCLS_INCLUDES)))\n\
 
 .SECONDEXPANSION:
 
-$(OBJS) : build/obj/%.o : $$(dir %)src/$$(notdir %) | build/obj/$$(dir %) build/dep
+$(OBJS_C) : build/obj/%.o : $$(dir %)$$(notdir %) | build/obj/$$(dir %) build/dep
 	@echo "building obj $@, requiered $^"
-	g++ "$<" -g3 $(DEFS) -c $(INCLUDES) -O0 -Wall -Wextra -Werror -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" -o "$@"
+	gcc "$<" -g3 $(DEFS) -c $(INCLUDES) -fPIC -O0 -Wall -Wextra -Werror -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" -o "$@"
+	@echo "moving dependency in build/dep/$(notdir $*).d"
+	-mv build/obj/$*.d build/dep/$(notdir $*).d
+
+$(OBJS) : build/obj/%.o : $$(dir %)$$(notdir %) | build/obj/$$(dir %) build/dep
+	@echo "building obj $@, requiered $^"
+	g++ "$<" -g3 $(DEFS) -c $(INCLUDES) -fPIC -O0 -Wall -Wextra -Werror -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" -o "$@"
 	@echo "moving dependency in build/dep/$(notdir $*).d"
 	-mv build/obj/$*.d build/dep/$(notdir $*).d
 
