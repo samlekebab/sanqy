@@ -7,9 +7,6 @@
 std::string dumpDatabase(void*);
 
 EXPORT
-int hello();
-
-EXPORT
 void* openDatabase(const char *, int);
 EXPORT
 void closeDatabase(void*);

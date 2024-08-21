@@ -7,14 +7,7 @@
 #include "random_pool.h"
 
 EXPORT
-int hello(){
-	printf("hello\n");
-	return 43;
-}
-
-EXPORT
 void* openDatabase(const char* file,int time){
-	hello();
 	std::string dbFile{file};
 	dbFile += ".db3";
 	std::string dailyStatusFile{file};
