@@ -9,51 +9,51 @@
 #include <ctime>
 #include <ncurses.h>
 
-void test1(){
-	int time=0;
-	Deck* handler = (Deck*)openDatabase("test",time);
-	handler->todayHeap.print();
-	std::string face,back;
-	face="test";
-	back="tteesstt";
-	insertCard(handler,face,back);
-	std::string res = dumpDatabase(handler);
-	std::cout<<res<<std::endl;
-	int i;
-	std::cin >> i;
-	deleteCard(handler,i);
-	res = dumpDatabase(handler);
-	std::cout<<res<<std::endl;
-	handler->todayHeap.print();
-	closeDatabase(handler);
-
-}
-void fillDb(){
-	int time=0;
-	std::srand(std::time(0));
-	Deck* handler = (Deck*)openDatabase("test",time);
-	printf("filling database\n");
-	for (int i=0; i<1000;i++){
-		std::ostringstream face,back;
-		face << "front " << std::rand();
-		back << "back " << std::rand();
-		
-		insertCard(handler,face.str(),back.str());
-	}
-	closeDatabase(handler);
-
-}
-void test2(){
-
-	int time=5000;
-	Deck* handler = (Deck*)openDatabase("test",time);
-	if (isRevisionAvailable(handler,time)){
-		Options options = getOptions(handler);
-		revisionCallBack(handler,options,3,time);
-
-	}
-	closeDatabase(handler);
-}
+//void test1(){
+//	int time=0;
+//	Deck* handler = (Deck*)openDatabase("test",time);
+//	handler->todayHeap.print();
+//	std::string face,back;
+//	face="test";
+//	back="tteesstt";
+//	insertCard(handler,face,back);
+//	std::string res = dumpDatabase(handler);
+//	std::cout<<res<<std::endl;
+//	int i;
+//	std::cin >> i;
+//	deleteCard(handler,i);
+//	res = dumpDatabase(handler);
+//	std::cout<<res<<std::endl;
+//	handler->todayHeap.print();
+//	closeDatabase(handler);
+//
+//}
+//void fillDb(){
+//	int time=0;
+//	std::srand(std::time(0));
+//	Deck* handler = (Deck*)openDatabase("test",time);
+//	printf("filling database\n");
+//	for (int i=0; i<1000;i++){
+//		std::ostringstream face,back;
+//		face << "front " << std::rand();
+//		back << "back " << std::rand();
+//		
+//		insertCard(handler,face.str(),back.str());
+//	}
+//	closeDatabase(handler);
+//
+//}
+//void test2(){
+//
+//	int time=5000;
+//	Deck* handler = (Deck*)openDatabase("test",time);
+//	if (isRevisionAvailable(handler,time)){
+//		Options options = getOptions(handler);
+//		revisionCallBack(handler,options,3,time);
+//
+//	}
+//	closeDatabase(handler);
+//}
 void startRevision(void* handler, int time){
 	UNUSED(handler);
 	initscr(); 
@@ -104,7 +104,7 @@ void startRevision(void* handler, int time){
 				no=4;
 			}
 		}
-		revisionCallBack(handler,options,no,time);
+		revisionCallBack(handler,no,time);
 	}
 	endwin();
 	printf("revisions finished\n");
@@ -142,7 +142,7 @@ int main(int argc, char* argv[]){
 		std::string face,back;
 		face=argv[3];
 		back=argv[4];
-		insertCard(handler,face,back);
+		insertCard(handler,face.c_str(),back.c_str());
 		closeDatabase(handler);
 		return 0;
 	}

@@ -14,7 +14,7 @@ void closeDatabase(void*);
 
 //return weather database is open
 EXPORT
-bool insertCard(void* voidDeck,const std::string &fwrd, const std::string &bwrd);
+bool insertCard(void* voidDeck,const char* fwrd, const char* bwrd);
 
 EXPORT
 bool deleteCard(void* voidDeck, int uid);
@@ -32,10 +32,33 @@ EXPORT
 Options getOptions(void* voidDeck);
 
 EXPORT
-void revisionCallBack(void* voidDeck,Options options, int no, int time);
+void revisionCallBack(void* voidDeck, int no, int time);
 
 EXPORT
 void modifyCard(void* voidDeck,char* newWord,int uid);
 
 EXPORT
 void resetAllCards(void* handler);
+
+EXPORT 
+void getCardWord(void* handler,int uid, char* ret);
+
+extern "C" {
+struct TwoInt{
+	int one;
+	int two;
+};
+
+struct TestStruct{
+	int mInt;
+};
+}
+
+EXPORT
+TestStruct testStruct();
+
+EXPORT 
+int getCardsUids(void* handler, TwoInt**);
+
+EXPORT
+void invalidateCardsUids(TwoInt* uids);

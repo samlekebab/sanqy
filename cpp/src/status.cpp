@@ -1,8 +1,8 @@
 #include "status.h"
 #include "card.h"
 #include <cstring>
-Options learning(Card* card){
-	Options ret;
+COptions learning(Card* card){
+	COptions ret;
 	ret.option1.time = 1;
 	sprintf(ret.option1.str,"again 1m");
 	sprintf(ret.option1.status,STATUS_LEARNING);
@@ -40,8 +40,8 @@ Options learning(Card* card){
 
 	return ret;
 }
-Options known(Card* card, int easeFactor){
-	Options ret;
+COptions known(Card* card, int easeFactor){
+	COptions ret;
 	ret.option1.time = 1;
 	sprintf(ret.option1.str,"again 1m");
 	sprintf(ret.option1.status,STATUS_RELEARNING);
@@ -77,8 +77,8 @@ Options known(Card* card, int easeFactor){
 	return ret;
 }
 
-Options old(Card* card){
-	Options ret;
+COptions old(Card* card){
+	COptions ret;
 	ret.option1.time = 10;
 	sprintf(ret.option1.str,"again 10m");
 	sprintf(ret.option1.status,STATUS_RELEARNING);
@@ -95,8 +95,8 @@ Options old(Card* card){
 
 }
 
-Options relearning(Card* card){
-	Options ret;
+COptions relearning(Card* card){
+	COptions ret;
 	ret.option1.time = 1;
 	sprintf(ret.option1.str,"again 1m");
 	sprintf(ret.option1.status,STATUS_LEARNING);
@@ -117,7 +117,7 @@ Options relearning(Card* card){
 
 	return ret;
 }
-Options makeOptions(Card* card){
+COptions makeOptions(Card* card){
 	if(isStatus(STATUS_LEARNING)){
 		return learning(card);
 
@@ -138,7 +138,7 @@ Options makeOptions(Card* card){
 
 	}
 
-	return Options();
+	return COptions();
 
 
 

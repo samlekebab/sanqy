@@ -2,7 +2,11 @@
 #include <cstdlib>
 #include <ctime>
 void RandomPool::chooseNext(){
-	idRandom = 1 + std::rand() / ((RAND_MAX + 1u) / heap.n);
+	if (heap.n > 0){
+		idRandom = 1 + std::rand() / ((RAND_MAX + 1u) / heap.n);
+	}else{
+		idRandom = 0;
+	}
 }
 CardNodeRP RandomPool::viewRandom(){
 	if (idRandom>=heap.n)

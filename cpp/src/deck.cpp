@@ -72,6 +72,7 @@ CardNodeRP Deck::pop(){
 	if (!randomPool.heap.isEmpty() && 
 		dailyStatus.dailyStatusStruct.nbNewCards < newCardLimit){
 		dailyStatus.dailyStatusStruct.nbNewCards ++;
+		dailyStatus.saveStatus();
 		return randomPool.popRandom();
 	}
 	return todayHeap.pop();

@@ -53,6 +53,10 @@ src.list : Makefile
 	echo -e '\
 	$(addprefix \n"./,$(addsuffix ", $(SRCS) $(SRCS_C)))' > src.list
 
+h.list : Makefile
+	echo -e '\
+	$(addprefix \n"./,$(addsuffix ", $(HEADER_DIR) ))' > h.list
+
 build/object.list : Makefile
 	echo -e '\
 	$(addprefix \n"./,$(addsuffix ", $(OBJS) $(OBJS_C)))' > build/object.list

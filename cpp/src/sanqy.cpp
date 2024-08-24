@@ -46,13 +46,16 @@ bool deleteCard(void* voidDeck, int uid){
 	return 0;
 
 }
-bool insertCard(void* voidDeck,const std::string &fwrd, const std::string &bwrd){
+bool insertCard(void* voidDeck,const char* Cfwrd, const char* Cbwrd){
 
 	if (voidDeck==nullptr){
 		return 1;
 	}
 	auto deck = (Deck*)voidDeck;
 	CardDatabase& db = deck->cardDatabase;
+
+	std::string fwrd{Cfwrd};
+	std::string bwrd{Cbwrd};
 	
 	//put the card in the db
 	TwoCards card{
@@ -157,12 +160,15 @@ bool isRevisionAvailable(void* voidDeck,int time){
 	bool ret = revTime < time+DELAY_REV_MARGIN;
 	return ret;
 }
-void revisionCallBack(void* voidDeck,Options options, int no, int time){
+
+EXPORT
+void revisionCallBack(void* voidDeck, int no, int time){
 	if (voidDeck==nullptr){
 		return;
 	}
 	auto deck = (Deck*)voidDeck;
-	Option* option =& ((Option*)(&options))[no-1];
+	Options options = getOptions(voidDeck);
+	COption* option =&((COption*)(&options))[no-1];
 	
 	
 	//TODO count unique uids for number of card of the day
@@ -173,7 +179,7 @@ void revisionCallBack(void* voidDeck,Options options, int no, int time){
 EXPORT
 Options getOptions(void* voidDeck){
 	if (voidDeck==nullptr){
-		return Options();
+		return COptions();
 	}
 	auto deck = (Deck*)voidDeck;
 	Card card = deck->cardDatabase.getCard(
@@ -198,4 +204,42 @@ void resetAllCards(void* voidDeck){
 	deck->cardDatabase.resetAllCards(STATUS_LEARNING,0);
 	deck->rebuildHeaps();
 
+}
+
+EXPORT 
+void getCardWord(void* voidDeck, int uid, char* ret){
+	if (voidDeck==nullptr){
+		return;
+	}
+	auto deck = (Deck*)voidDeck;
+	Card card = deck->cardDatabase.getCard(uid);
+	sprintf(ret,"%s",card.word.c_str());
+}
+
+EXPORT
+int getCardsUids(void* voidDeck, TwoInt** twoIntP){
+	if (voidDeck==nullptr){
+		return 0;
+	}
+	auto deck = (Deck*)voidDeck;
+	TwoCards* cards;
+	int ret = deck->cardDatabase.getTwoCardArray(&cards,0);
+	*twoIntP = new TwoInt[ret];
+	for (int i=0;i<ret;i++){
+		(*twoIntP)[i].one  = cards[i].front.uid;
+		(*twoIntP)[i].two  = cards[i].back.uid;
+	}
+	delete[] cards;
+	return ret;
+
+}
+
+EXPORT
+void invalidateCardsUids(TwoInt* uids){
+	delete uids;
+}
+
+EXPORT
+TestStruct testStruct(){
+	return TestStruct{42};
 }

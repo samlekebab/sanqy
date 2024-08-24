@@ -20,13 +20,21 @@
 
 extern "C"{
 typedef struct Option{
-	int time = -1;
-	char str[OPTION_STR_MAX]="";
-	char status[OPTION_STR_MAX]="";
-	int shown = 0;
-	int failed = 0;
+	int time ;
+	char str[OPTION_STR_MAX];
+	char status[OPTION_STR_MAX];
+	int shown;
+	int failed;
 
 } Option;
+//typedef struct Option{
+//	int time = -1;
+//	char str[OPTION_STR_MAX]="";
+//	char status[OPTION_STR_MAX]="";
+//	int shown = 0;
+//	int failed = 0;
+//
+//} Option;
 typedef struct Options{
 	Option option1;
 	Option option2;
@@ -34,6 +42,23 @@ typedef struct Options{
 	Option option4;
 } Options;
 }
+struct COption:Option{
+	COption(){
+		time = -1;
+		str[0] = '\0';
+		status[0] = '\0';
+		shown = 0;
+		failed = 0; 
+	}
+};
+struct COptions:Options{
+	COptions(){
+		option1 = COption();
+		option2 = COption();
+		option3 = COption();
+		option4 = COption();
+	}
+};
 
 struct Card;
-Options makeOptions(Card* card);
+COptions makeOptions(Card* card);

@@ -8,9 +8,10 @@ DailyStatus::DailyStatus(std::string f,int time):
 	file(f),
 	dailyStatusStruct(fromFile(f)){
 	if (time/1440 != dailyStatusStruct.time/1440){
-		dailyStatusStruct.time = time;
 		dailyStatusStruct.nbNewCards = 0;
 	}
+	dailyStatusStruct.time = time;
+	saveStatus();
 }
 DailyStatusStruct DailyStatus::fromFile(std::string file){
 
@@ -20,16 +21,19 @@ DailyStatusStruct DailyStatus::fromFile(std::string file){
 	fseek(f, 0L, SEEK_END);
 	size_t s = ftell(f);
 	fseek(f, 0L, SEEK_SET);
-	//TODO openfile, check size, dump it in dailyStatusStruct
-	DailyStatusStruct ret;
+	DailyStatusStruct ret{0,0};
 	if (s<sizeof(DailyStatusStruct))
 		return ret;
 		
 	fread(&ret,sizeof(DailyStatusStruct),1,f);
+	fclose(f);
 	return ret;
 }
 DailyStatus::~DailyStatus(){
+	saveStatus();
+}
+void DailyStatus::saveStatus(){
 	FILE* f = fopen(file.c_str(),"wb");
 	fwrite(&dailyStatusStruct,sizeof(DailyStatusStruct),1,f);
-
+	fclose(f);
 }

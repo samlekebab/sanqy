@@ -13,5 +13,6 @@ public:
 	DailyStatusStruct dailyStatusStruct;
 	DailyStatusStruct fromFile(std::string f);
 	DailyStatus(std::string file, int time);
+	void saveStatus();
 	~DailyStatus();
 };
