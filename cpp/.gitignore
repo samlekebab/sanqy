@@ -2,3 +2,7 @@
 .ccls-cache
 *.db3
 decks
+*.status
+*.list
+*.b
+.gdb_history
