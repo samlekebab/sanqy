@@ -60,7 +60,7 @@ class _DeckAction extends State<DeckAction>{
 
 
 		TestStruct t = testStruct();
-		print(t.mInt);
+		//print(t.mInt);
 	}
 
 	@override
@@ -135,17 +135,18 @@ class _DeckAction extends State<DeckAction>{
 				child: Column(
 					mainAxisAlignment:MainAxisAlignment.center,
 					children:[
-						ElevatedButton(
-							onPressed: () => openCreateCard(),
-							child: const Text('create card'),
-						),
+						Text("deck $deckName"),
 						ElevatedButton(
 							onPressed: () => openCardList(),
 							child: const Text('open card list'),
 						),
 						ElevatedButton(
+							onPressed: () => openCreateCard(),
+							child: const Text('create card'),
+						),
+						ElevatedButton(
 							onPressed: () => openStudy(),
-							child: const Text('study'),
+							child: const Text('studyy'),
 						),
 					]
 				)

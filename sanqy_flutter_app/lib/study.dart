@@ -30,6 +30,18 @@ class _Study extends State<Study>{
 	late final GetOptions getOptions;
 	late final RevisionCallback revisionCallback;
 
+	late final GetInt getRevisionCount;
+	late final GetInt getNewCardCount; 
+	late final GetInt getMaxNewCardCount;
+	late final GetInt getCurrentNewCardCount;
+	late final GetInt getCurrentRevisionCount;
+	int currentRevisonCount = 0;
+	int currentNewCardCount =0;
+	int maxNewCardCount = 0;
+	int newCardCount = 0;
+	int revisionCount = 0;
+
+	final fontSize = 20.0;
 	String front = "";
 	String back = "";
 	late Options options;
@@ -60,6 +72,21 @@ class _Study extends State<Study>{
 				widget.dylib.lookupFunction
 				<CFunc_RevisionCallback, RevisionCallback>('revisionCallBack');
 
+		getRevisionCount =
+				widget.dylib.lookupFunction
+				<Cfunc_GetInt, GetInt>('getRevisionCount');
+		getNewCardCount =
+				widget.dylib.lookupFunction
+				<Cfunc_GetInt, GetInt>('getNewCardCount');
+		getMaxNewCardCount =
+				widget.dylib.lookupFunction
+				<Cfunc_GetInt, GetInt>('getMaxNewCardCount');
+		getCurrentNewCardCount =
+				widget.dylib.lookupFunction
+				<Cfunc_GetInt, GetInt>('getCurrentNewCardCount');
+		getCurrentRevisionCount =
+				widget.dylib.lookupFunction
+				<Cfunc_GetInt, GetInt>('getCurrentRevisionCount');
 
 		startStudy();
 	}
@@ -74,6 +101,11 @@ class _Study extends State<Study>{
 		}else{
 			studyState = StudyState.FINISHED;
 		}
+		currentRevisonCount = getCurrentRevisionCount(widget.handler);
+		currentNewCardCount = getCurrentNewCardCount(widget.handler);
+		maxNewCardCount = getMaxNewCardCount(widget.handler);
+		newCardCount = getNewCardCount(widget.handler);
+		revisionCount = getRevisionCount(widget.handler);
 		setState(()=>{});
 	}
 
@@ -127,7 +159,9 @@ class _Study extends State<Study>{
 				studyState == StudyState.BACK ||
 				studyState == StudyState.FINISHED){
 			final Widget backWidget = (studyState == StudyState.BACK) 
-					?	Text(back) 
+					?	SelectableText(back, 
+							style:TextStyle(fontSize : fontSize),
+							) 
 					: SizedBox(width: 0, height: 0);
 					
 
@@ -166,13 +200,23 @@ class _Study extends State<Study>{
 					);
 
 			return Scaffold(
+				appBar: AppBar(
+					title:Text("$currentNewCardCount/$maxNewCardCount" 
+										"($newCardCount)new "
+										"$currentRevisonCount/0"
+										"($revisionCount)study"
+										),
+				),
+				
 				body: Center(
 					child: Column(
 						mainAxisAlignment:MainAxisAlignment.center,
 						children:studyState == StudyState.FINISHED
 							? [Text("no more cards to study")]
 							: [
-								Text(front),
+								SelectableText(front, 
+									style:TextStyle(fontSize : fontSize),
+								), 		
 								backWidget,
 								answer
 							]

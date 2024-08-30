@@ -26,7 +26,7 @@ class _DeckSelector extends State<DeckSelector>{
 		initDeck();
   }
 	void initDeck() async {
-				final SharedPreferences prefs = await SharedPreferences.getInstance();
+		final SharedPreferences prefs = await SharedPreferences.getInstance();
 		strDecks = await prefs.getString("decks");
 		if (strDecks != null){
 			decks = strDecks!.split('\n');

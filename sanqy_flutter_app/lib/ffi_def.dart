@@ -75,6 +75,12 @@ typedef Cfunc_DeleteCard = ffi.Void
 typedef DeleteCard = void
 					Function(ffi.Pointer,int);
 
+typedef Cfunc_GetInt = ffi.Int
+					Function(ffi.Pointer);
+
+typedef GetInt = int
+					Function(ffi.Pointer);
+
 final class Option extends ffi.Struct {
 	@ffi.Int()
 	external int time;
