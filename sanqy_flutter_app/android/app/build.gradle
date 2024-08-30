@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.atheris.sanqy"
+    namespace = "com.example.sanqy_flutter_app"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
