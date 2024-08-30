@@ -13,6 +13,8 @@ public:
 
 	int newCardLimit=NEW_CARD_LIMIT;
 
+	int dailyRevisionAvailableCounter = 0;
+
 	Card* getTopCard();
 	void rescheduleTopCard(const Option* option, int time);
 	void scheduleNewCard(CardNodeRP cardNode);

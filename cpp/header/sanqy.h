@@ -62,3 +62,18 @@ int getCardsUids(void* handler, TwoInt**);
 
 EXPORT
 void invalidateCardsUids(TwoInt* uids);
+
+EXPORT 
+int getCurrentRevisionCount(void * handler);
+
+EXPORT 
+int getCurrentNewCardCount(void* handler);
+
+EXPORT
+int getMaxNewCardCount(void* handler);
+
+EXPORT
+int getNewCardCount(void* handler);
+
+EXPORT
+int getRevisionCount(void* handler);

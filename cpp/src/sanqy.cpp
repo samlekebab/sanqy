@@ -172,6 +172,9 @@ void revisionCallBack(void* voidDeck, int no, int time){
 	
 	
 	//TODO count unique uids for number of card of the day
+	if (option->time>=1440){
+		deck->dailyStatus.dailyStatusStruct.nbRevisionCards++;
+	}
 	
 	//update the heap and database
 	deck->rescheduleTopCard(option,time);
@@ -242,4 +245,48 @@ void invalidateCardsUids(TwoInt* uids){
 EXPORT
 TestStruct testStruct(){
 	return TestStruct{42};
+}
+
+EXPORT 
+int getCurrentRevisionCount(void * voidDeck){
+	if (voidDeck==nullptr){
+		return 0;
+	}
+	auto deck = (Deck*)voidDeck;
+	return deck->dailyStatus.dailyStatusStruct.nbRevisionCards;
+}
+EXPORT 
+int getCurrentNewCardCount(void* voidDeck){
+	if (voidDeck==nullptr){
+		return 0;
+	}
+	auto deck = (Deck*)voidDeck;
+	return deck->dailyStatus.dailyStatusStruct.nbNewCards;
+}
+
+EXPORT
+int getMaxNewCardCount(void* voidDeck){
+	if (voidDeck==nullptr){
+		return 0;
+	}
+	auto deck = (Deck*)voidDeck;
+	UNUSED(deck);
+	return NEW_CARD_LIMIT;
+}
+
+EXPORT
+int getNewCardCount(void* voidDeck){
+	if (voidDeck==nullptr){
+		return 0;
+	}
+	auto deck = (Deck*)voidDeck;
+	return deck->randomPool.heap.n;
+}
+EXPORT
+int getRevisionCount(void* voidDeck){
+	if (voidDeck==nullptr){
+		return 0;
+	}
+	auto deck = (Deck*)voidDeck;
+	return deck->dailyRevisionAvailableCounter;
 }

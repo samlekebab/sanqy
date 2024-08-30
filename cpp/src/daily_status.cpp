@@ -9,6 +9,7 @@ DailyStatus::DailyStatus(std::string f,int time):
 	dailyStatusStruct(fromFile(f)){
 	if (time/1440 != dailyStatusStruct.time/1440){
 		dailyStatusStruct.nbNewCards = 0;
+		dailyStatusStruct.nbRevisionCards = 0;
 	}
 	dailyStatusStruct.time = time;
 	saveStatus();

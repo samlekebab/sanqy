@@ -35,12 +35,10 @@ CardNodeRP Heap::view(){
 	return data[0];
 }
 void Heap::push(CardNodeRP cardNode){
-	cardNode.getCardNode()->heap = this;
-	cardNode.getCardNode()->heapPosition = n;
 	if (n>=maxSize){
 		doubleDataSize();
 	}
-	//TODO
+	cardNode.getCardNode()->heap = this;
 	data[n] = cardNode;
 	cardNode.getCardNode()->heapPosition = n;
 
@@ -64,21 +62,16 @@ CardNodeRP Heap::pop(int position) {
 	int i = position;
 	int tmp = 2 * i + 1;
 	while (!end && tmp < n) {
-		int j = i;
-		end = true;
-		if (nodeCompare(data[i], data[tmp])) {
-			heapSwap(i, tmp);
-			end = false;
-			j = tmp;
+		end=true;
+		if (tmp+1<n && nodeCompare(data[tmp],data[tmp+1])){
+			tmp+=1;
 		}
-		if (tmp + 1 < n && nodeCompare(data[i], data[tmp + 1])) {
-			tmp++;
-			heapSwap(i, tmp);
-			end = false;
-			j = (i == j ?tmp:j);
+		if (nodeCompare(data[i],data[tmp])){
+			heapSwap(i,tmp);
+			end=false;
+			i=tmp;
+			tmp = 2 * i + 1;
 		}
-		tmp = 2 * j + 1;
-		i = j;
 	}
 	return res;
 }

@@ -5,7 +5,7 @@
 struct DailyStatusStruct{
 	int time = 0;
 	int nbNewCards = 0;
-
+	int nbRevisionCards = 0;
 };
 class DailyStatus{
 public:

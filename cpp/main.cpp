@@ -63,8 +63,20 @@ void startRevision(void* handler, int time){
 		clear();
 		getRevisionFront(handler,front);
 		mvprintw(5,40,"%s",front);
-		refresh();
 		mvprintw(8,40,"ENTER - view solution");
+		int currentRevisonCount = getCurrentRevisionCount(handler);
+		int currentNewCardCount = getCurrentNewCardCount(handler);
+		int maxNewCardCount = getMaxNewCardCount(handler);
+		int newCardCount = getNewCardCount(handler);
+		int revisionCount = getRevisionCount(handler);
+		mvprintw(3,40,"%d/%d(%d)new %d/%d(%d)study",
+				currentNewCardCount,
+				maxNewCardCount,
+				newCardCount,
+				currentRevisonCount,
+				0,
+				revisionCount
+				);
 		refresh();
 		int cc= getch();
 		if (cc=='q'){
@@ -74,6 +86,14 @@ void startRevision(void* handler, int time){
 		}
 		Options options = getOptions(handler);
 		clear();
+		mvprintw(3,40,"%d/%d(%d)new %d/%d(%d)study",
+				currentNewCardCount,
+				maxNewCardCount,
+				newCardCount,
+				currentRevisonCount,
+				0,
+				revisionCount
+				);
 		mvprintw(5,40,"%s",front);
 		getRevisionBack(handler,back);
 		mvprintw(6,40,"%s",back);
@@ -115,8 +135,8 @@ void test3(){
 
 }
 int main(int argc, char* argv[]){
-	int time = 1440*291+573;//TODO real time
-
+	int time = 1440*297+573;//TODO real time
+	printf("at %d\n",time);
 	if(argc==1){
 		printf("welcome on sanqy\n\
 		add <table> <front> <back> to add a card \n\

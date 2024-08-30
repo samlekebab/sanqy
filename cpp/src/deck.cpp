@@ -40,6 +40,7 @@ void Deck::removeFromHeap(int uid){
 	int  hPosition = cardNode.getCardNode()->heapPosition;
 	h->pop(hPosition);
 }
+
 void Deck::rescheduleTopCard(const Option* option, int time){
 	int revisionTime = option->time+time;
 	//if inteval over a day,
@@ -75,12 +76,17 @@ CardNodeRP Deck::pop(){
 		dailyStatus.saveStatus();
 		return randomPool.popRandom();
 	}
+	dailyRevisionAvailableCounter--;
 	return todayHeap.pop();
 }
 void Deck::push(CardNodeRP cardNode){
 	if (cardNode.getCardNode()->revisionTime <=0){
 		randomPool.heap.push(cardNode);
 	}else{
+		if (cardNode.getCardNode()->revisionTime/1440
+				<=dailyStatus.dailyStatusStruct.time/1440){
+			dailyRevisionAvailableCounter++;
+		}
 		todayHeap.push(cardNode);
 	}
 
